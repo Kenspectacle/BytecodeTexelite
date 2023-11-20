@@ -1,14 +1,7 @@
 import os
 import subprocess
 import sys
-
-def findTotalFiles(fileEnding, path):
-    total_files = 0
-    for dirpath, dirs, files in os.walk(path):
-        for file in files:
-            if file.endswith(fileEnding):
-                total_files += 1
-    return total_files
+from utilities import find_total_files
 
 
 def main():
@@ -18,7 +11,7 @@ def main():
     print(path)
     command = "jar -xf "
     fileEnding = ".jar"
-    total_files = findTotalFiles(fileEnding, path)
+    total_files = find_total_files(fileEnding, path)
     current_file_number = 0
 
     # Traverse through the directories(and subdirectories) in Java_Classes
