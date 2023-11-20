@@ -16,8 +16,8 @@ def findTotalFiles(fileEnding, path):
 def main():
     print(os.getcwd())
     path = os.path.join(os.getcwd(), sys.argv[1])
-    fileEnding = ".class"
-    total_files = findTotalFiles(fileEnding, path)
+    file_ending = ".class"
+    total_files = findTotalFiles(file_ending, path)
     command = "javap -c "
     current_file_number = 0
 

@@ -16,8 +16,8 @@ def main():
     print(os.getcwd())
     path = os.path.join(os.getcwd(), sys.argv[1])
     command = "cp "
-    fileEnding = ".class"
-    total_files = findTotalFiles(fileEnding, path)
+    file_ending = ".class"
+    total_files = findTotalFiles(file_ending, path)
     current_file_number = 0
 
     # Traverse through the directories(and subdirectories) in Java_Classes
