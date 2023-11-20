@@ -1,6 +1,6 @@
 import os
 import subprocess
-
+import sys
 
 def findTotalFiles(fileEnding, path):
     total_files = 0
@@ -15,7 +15,7 @@ def findTotalFiles(fileEnding, path):
 
 def main():
     print(os.getcwd())
-    path = os.getcwd() + "/Java_Classes"
+    path = os.path.join(os.getcwd(), sys.argv[1])
     fileEnding = ".class"
     total_files = findTotalFiles(fileEnding, path)
     command = "javap -c "

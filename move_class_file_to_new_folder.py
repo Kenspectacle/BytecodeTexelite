@@ -1,5 +1,6 @@
 import os
 import subprocess
+import sys
 
 
 def findTotalFiles(fileEnding, path):
@@ -13,7 +14,7 @@ def findTotalFiles(fileEnding, path):
 
 def main():
     print(os.getcwd())
-    path = os.getcwd() + "/Test1"
+    path = os.path.join(os.getcwd(), sys.argv[1])
     command = "cp "
     fileEnding = ".class"
     total_files = findTotalFiles(fileEnding, path)
