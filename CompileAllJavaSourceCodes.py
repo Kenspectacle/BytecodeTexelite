@@ -1,28 +1,28 @@
 import os
 import subprocess
+import sys
 
-
-def findTotalFiles():
-    path = os.getcwd() + "/Java_Classes"
+def findTotalFiles(fileEnding, path):
     total_files = 0
     for dirpath, dirs, files in os.walk(path):
         for file in files:
-            if file.endswith(".jar"):
+            if file.endswith(fileEnding):
                 total_files += 1
     return total_files
 
 
 def main():
     print(os.getcwd())
-    path = os.getcwd() + "/Java_Classes"
+    print(sys.argv[1])
+    path = os.path.join(os.getcwd(), sys.argv[1])
+    print(path)
     command = "jar -xf "
-    total_files = findTotalFiles()
+    fileEnding = ".jar"
+    total_files = findTotalFiles(fileEnding, path)
     current_file_number = 0
 
     # Traverse through the directories(and subdirectories) in Java_Classes
     for dirpath, dirs, files in os.walk(path):
-        # Calculate the relative path from the starting directory
-        rel_path = os.path.relpath(dirpath, path)
         for file in files:
             if file.endswith(".jar"):
                 current_file_number += 1
