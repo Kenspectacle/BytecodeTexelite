@@ -10,8 +10,8 @@ def main():
     path = os.path.join(os.getcwd(), sys.argv[1])
     print(path)
     command = "jar -xf "
-    fileEnding = ".jar"
-    total_files = find_total_files(fileEnding, path)
+    file_ending = ".jar"
+    total_files = find_total_files(file_ending, path)
     current_file_number = 0
 
     # Traverse through the directories(and subdirectories) in Java_Classes
