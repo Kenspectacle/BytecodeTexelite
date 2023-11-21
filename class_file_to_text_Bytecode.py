@@ -1,23 +1,14 @@
 import os
 import subprocess
 import sys
-
-def findTotalFiles(fileEnding, path):
-    total_files = 0
-    for dirpath, dirs, files in os.walk(path):
-        # Ignores StubClass folder
-        dirname = dirpath.split(os.path.sep)[-1]
-        for file in files:
-            if file.endswith(fileEnding) and dirname != "StubClass":
-                total_files += 1
-    return total_files
-
+from utilities import find_total_files
 
 def main():
     print(os.getcwd())
     path = os.path.join(os.getcwd(), sys.argv[1])
     file_ending = ".class"
-    total_files = findTotalFiles(file_ending, path)
+    filtered_directory = "StubClass"
+    total_files = find_total_files(file_ending, path, filtered_directory)
     command = "javap -c "
     current_file_number = 0
 
