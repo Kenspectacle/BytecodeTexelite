@@ -21,9 +21,6 @@ def main():
                 os.chdir(dirpath)
                 result = subprocess.run(
                     command + file, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-                # print("Standard Output:")
-                # print(result.stdout)
-                # print("##########")
                 print("File Progress: " + str(current_file_number) +
                       "/" + str(total_files))
                 print(os.getcwd() + " " + file)
