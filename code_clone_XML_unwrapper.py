@@ -15,12 +15,17 @@ Output:
 How to use:
 1. Use NiCad to create code clones
 2. Take one of the file from the output in NiCad
-3. In the terminal run "python code_clone_XML_unwrapper.py [code_clone_file]"
+3. In the terminal run "python code_clone_XML_unwrapper.py [code_clone_file] [unwrapped_file_name]"
 
 """
 
+def get_subdirectory(directory):
+    match = re.search(r'/(?P<substring>[^/]+)/$', directory)
+    if match:
+        return match.group('substring')
+
 # Separate the directory and file in path
-def separate_directory_and_file(path):
+def separate_subdirectory_and_file(path):
     # Define the regex pattern
     pattern = r'^(.*[\\\/])(.*)$'  # Matches the directory part and the file part
     
@@ -31,7 +36,8 @@ def separate_directory_and_file(path):
     if match:
         directory = match.group(1)
         filename = match.group(2)
-        return directory, filename
+        subdirectory = get_subdirectory(directory)
+        return subdirectory, filename
     else:
         return "default", path
 
@@ -50,7 +56,7 @@ def source_extractor(source):
     print("path: ", path)
     
     # Separate Directory and Filename from path
-    directory,filename = separate_directory_and_file(path)
+    directory,filename = separate_subdirectory_and_file(path)
     print("directory: ", directory)
     print("filename: ", filename)
     
