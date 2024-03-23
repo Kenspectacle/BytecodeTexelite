@@ -15,9 +15,14 @@ Output:
 How to use:
 1. Use NiCad to create code clones
 2. Take one of the file from the output in NiCad
-3. In the terminal run "python code_clone_XML_unwrapper.py [code_clone_file] [unwrapped_file_name]"
+3. In the terminal run "python code_clone_XML_unwrapper.py [code_clone_file] [unwrapped_file_name] [modes]"
+4. if you enter 1 for modes, it will rename all file ending with class.bc to .java, otherwise by default file endings won't change
 
 """
+
+def rename_ending_class_bc_to_java(filename):
+    new_filename = re.sub(r'\.class\.bc$', '.java', filename)
+    return new_filename
 
 def get_subdirectory(directory):
     match = re.search(r'/(?P<substring>[^/]+)/$', directory)
@@ -106,7 +111,41 @@ def create_output(input_file_path):
             line = file.readline()
     return outputs
 
-
+def create_output_renamed_class_bc_to_Java(input_file_path):
+    outputs = []
+    
+    # Open a code clone xml result from NiCad
+    with open(input_file_path, 'r') as file:
+        # Read the first line
+        line = file.readline()
+        print(line)
+        
+        # Iterate through the rest
+        while line:
+            print(line)
+            # Find Clone pair
+            if line[0:7] == "<clone ":
+                print('CLONE: ', line)
+                
+                # prepare output
+                output = ""
+                
+                # first clone source
+                line = file.readline()
+                directory1,filename1,startline1,endline1 = source_extractor(line)
+                filename1 = rename_ending_class_bc_to_java(filename1)
+                
+                 # second clone source
+                line = file.readline()
+                directory2,filename2,startline2,endline2 = source_extractor(line)
+                filename2 = rename_ending_class_bc_to_java(filename2)
+                
+                # add into outputs list
+                output = directory1 + "," + filename1 + ',' + startline1 + ',' + endline1 + ',' + directory2 + "," + filename2 + ',' + startline2 + ',' + endline2
+                outputs.append(output)
+            
+            line = file.readline()
+    return outputs
 
 def main():
     
@@ -120,7 +159,9 @@ def main():
         modes = sys.argv[3]
     
     # default mode
-    if modes == 0:
+    if modes == "1":
+        outputs = create_output_renamed_class_bc_to_Java(input_file_path)
+    else:
         outputs = create_output(input_file_path)
 
     # To check the outputs as debugging log
