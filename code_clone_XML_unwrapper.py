@@ -72,20 +72,11 @@ def source_extractor(source):
     
     return directory,filename,startline,endline
 
-
-
-
-
-
-def main():
+def create_output(input_file_path):
     outputs = []
     
-    # Takes the first arg as the file input 
-    print(sys.argv[1])
-    
-    
     # Open a code clone xml result from NiCad
-    with open(sys.argv[1], 'r') as file:
+    with open(input_file_path, 'r') as file:
         # Read the first line
         line = file.readline()
         print(line)
@@ -113,6 +104,24 @@ def main():
                 outputs.append(output)
             
             line = file.readline()
+    return outputs
+
+
+
+def main():
+    
+    # File paths
+    input_file_path = sys.argv[1]
+    output_file_path = sys.argv[2]
+    modes = 0
+    
+    # Optional: can use different modes. Enter 1 to change .class.bc filename ending to .java
+    if len(sys.argv) > 3:
+        modes = sys.argv[3]
+    
+    # default mode
+    if modes == 0:
+        outputs = create_output(input_file_path)
 
     # To check the outputs as debugging log
     print("Result of the output: ")
