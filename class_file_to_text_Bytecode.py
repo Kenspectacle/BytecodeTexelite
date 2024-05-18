@@ -1,7 +1,7 @@
 import os
 import subprocess
 import sys
-from utilities import find_total_files
+from util.utilities import find_total_files
 
 def main():
     print(os.getcwd())
@@ -18,7 +18,7 @@ def main():
             dirname = dirpath.split(os.path.sep)[-1]
             if file.endswith(".class") and dirname != "StubClass":
                 current_file_number += 1
-                os.chdir(dirpath)
+                os.chdir(dirpath) # Change working directory to dirpath
                 result = subprocess.run(
                     command + file, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
                 print("File Progress: " + str(current_file_number) +
