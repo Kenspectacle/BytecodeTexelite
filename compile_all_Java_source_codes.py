@@ -1,7 +1,7 @@
 import os
 import subprocess
 import sys
-from utilities import find_total_files
+from utilities import find_total_files_with_certain_file_ending
 
 
 def main():
@@ -11,7 +11,7 @@ def main():
     print(path)
     command = "jar -xf "
     file_ending = ".jar"
-    total_files = find_total_files(file_ending, path)
+    total_files = find_total_files_with_certain_file_ending(file_ending, path)
     current_file_number = 0
 
     # Traverse through the directories(and subdirectories) in Java_Classes
