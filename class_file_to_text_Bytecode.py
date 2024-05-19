@@ -1,7 +1,7 @@
 import os
 import subprocess
 import sys
-from util.utilities import find_total_files
+from util.file_counter import find_total_files
 
 def main():
     print(os.getcwd())
