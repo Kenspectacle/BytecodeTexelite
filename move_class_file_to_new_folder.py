@@ -18,7 +18,6 @@ def main():
         
         # Calculate the relative path from the starting directory
         rel_path = os.path.relpath(dirpath, path)
-        print(rel_path)
         if filtered_directory in rel_path:
                     continue  # Skip this directory
                 
