@@ -14,9 +14,16 @@ def main():
 
     # Traverse through the directories(and subdirectories) in Java_Classes
     for dirpath, dirs, files in os.walk(path):
+        
         for file in files:
-            dirname = dirpath.split(os.path.sep)[-1]
-            if file.endswith(".class") and dirname != "StubClass":
+            
+            # Calculate the relative path from the starting directory
+            rel_path = os.path.relpath(dirpath, path)
+            if filtered_directory in rel_path:
+                        continue  # Skip this directory
+                    
+                    
+            if file.endswith(".class"):
                 current_file_number += 1
                 os.chdir(dirpath) # Change working directory to dirpath
                 result = subprocess.run(
