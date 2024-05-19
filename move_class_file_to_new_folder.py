@@ -1,7 +1,7 @@
 import os
 import subprocess
 import sys
-from util.utilities import find_total_files_with_file_ending_and_filtered_directory
+from util.file_counter import find_total_files_with_file_ending_and_filtered_directory
 
 
 def main():

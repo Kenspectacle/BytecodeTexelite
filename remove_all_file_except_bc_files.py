@@ -1,7 +1,7 @@
 import os
 import subprocess
 import sys
-from utilities import find_total_files
+from util.file_counter import find_total_files_without_certain_file_ending
 
 
 def main():
@@ -11,7 +11,8 @@ def main():
     print(path)
     # Using the slash to escape $ characters
     command = "rm "
-    total_files = find_total_files(path)
+    file_ending = ".bc"
+    total_files = find_total_files_without_certain_file_ending(file_ending, path)
     current_file_number = 0
 
     # Traverse through the directories(and subdirectories) in Java_Classes
