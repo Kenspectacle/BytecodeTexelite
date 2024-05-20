@@ -28,7 +28,7 @@ def walk_with_filtered_directory(path, command, file_ending, filtered_directory,
                     subprocess.run(command + file + " ..", shell=True,
                         stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
-def walk_with_filtered_file_ending(path, command, file_ending, total_files):
+def walk_with_filtered_file_ending_and_escaped_files(path, command, file_ending, total_files):
         current_file_number = 0
         
         
@@ -42,10 +42,13 @@ def walk_with_filtered_file_ending(path, command, file_ending, total_files):
                     current_file_number += 1
                     os.chdir(dirpath)
                     
+                    # Quote the filename to handle special characters
+                    quoted_file = "'" + file.replace("'", "'\\''") + "'"
+                    
                     # print file tracker
                     print("File Progress: " + str(current_file_number) +
                         "/" + str(total_files))
                     print(os.getcwd() + " " + file)
                     
-                    subprocess.run(command + file + " ..", shell=True,
+                    subprocess.run(command + quoted_file + " ..", shell=True,
                         stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
