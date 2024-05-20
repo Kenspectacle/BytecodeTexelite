@@ -27,3 +27,25 @@ def walk_with_filtered_directory(path, command, file_ending, filtered_directory,
                     
                     subprocess.run(command + file + " ..", shell=True,
                         stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+def walk_with_filtered_file_ending(path, command, file_ending, total_files):
+        current_file_number = 0
+        
+        
+        # Traverse through the directories(and subdirectories) in Java_Classes
+        for dirpath, dirs, files in os.walk(path):
+                    
+            for file in files:
+                if file.endswith(file_ending):
+                    continue
+                else:
+                    current_file_number += 1
+                    os.chdir(dirpath)
+                    
+                    # print file tracker
+                    print("File Progress: " + str(current_file_number) +
+                        "/" + str(total_files))
+                    print(os.getcwd() + " " + file)
+                    
+                    subprocess.run(command + file + " ..", shell=True,
+                        stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
