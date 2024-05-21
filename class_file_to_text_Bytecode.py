@@ -29,9 +29,9 @@ def main():
                 # get the result of the command
                 result = subprocess.run(
                     command + file, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-                print("File Progress: " + str(current_file_number) +
-                      "/" + str(total_files))
-                print(os.getcwd() + " " + file)
+                
+                print(f"File Progress: {current_file_number}/{total_files}")
+                print(f"Processing {os.path.join(os.getcwd(), file)}")
 
                 # Write the output of stdout to a .bc file in the same directory
                 output_file = os.path.join(dirpath, f"{os.path.splitext(file)[0]}.bc")
