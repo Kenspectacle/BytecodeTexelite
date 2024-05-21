@@ -32,9 +32,10 @@ def main():
                 print("File Progress: " + str(current_file_number) +
                       "/" + str(total_files))
                 print(os.getcwd() + " " + file)
-                
-                # Write out the output file of stdout
-                with open(os.path.join(os.path.dirname(dirpath), f"{file}.bc"), "w") as f:
+
+                # Write the output of stdout to a .bc file in the same directory
+                output_file = os.path.join(dirpath, f"{os.path.splitext(file)[0]}.bc")
+                with open(output_file, "w") as f:
                     f.write(result.stdout)
 
 
