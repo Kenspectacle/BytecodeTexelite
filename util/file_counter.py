@@ -50,3 +50,15 @@ def find_total_files_with_file_ending_and_filtered_directory(file_ending, path, 
                 total_files += 1
                 
     return total_files
+
+# Find total files with certain keyword in name and ending
+def find_total_files_with_certain_keyword(file_ending, path, keyword):
+    total_files = 0
+    
+    for dirpath, dirs, files in os.walk(path):
+    
+        for file in files:
+            if file.endswith(file_ending) and keyword in file:
+                total_files += 1
+    
+    return total_files
