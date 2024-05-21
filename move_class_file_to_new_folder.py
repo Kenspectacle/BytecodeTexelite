@@ -5,6 +5,13 @@ from util.file_walker import walk_with_filtered_directory
 
 def main():
     
+    print('''
+          ____________________________________________________________
+          
+          move_class_file_to_new_folder
+          ____________________________________________________________
+          ''')
+    
     # metadata
     print(os.getcwd())
     path = os.path.join(os.getcwd(), sys.argv[1])

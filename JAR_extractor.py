@@ -1,10 +1,17 @@
 import os
-import subprocess
 import sys
 from util.file_counter import find_total_files_with_certain_file_ending
 from util.file_walker import walk_with_specific_file_ending
 
 def main():
+    print('''
+          ____________________________________________________________
+          
+          JAR_extractor
+          ____________________________________________________________
+          ''')
+    
+    
     print(os.getcwd())
     print(sys.argv[1])
     path = os.path.join(os.getcwd(), sys.argv[1])

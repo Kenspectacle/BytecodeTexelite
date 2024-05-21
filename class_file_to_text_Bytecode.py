@@ -4,6 +4,13 @@ import sys
 from util.file_counter import find_total_files_with_file_ending_and_filtered_directory
 
 def main():
+    print('''
+          ____________________________________________________________
+          
+          class_file_to_text_bytecode
+          ____________________________________________________________
+          ''')
+    
     print(os.getcwd())
     path = os.path.join(os.getcwd(), sys.argv[1])
     file_ending = ".class"

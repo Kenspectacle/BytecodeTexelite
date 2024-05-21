@@ -15,4 +15,12 @@ def remove_empty_subfolders(path):
                 os.rmdir(dir_to_check)
                 print(f"Removed empty directory: {dir_to_check}")
 
+
+print('''
+          ____________________________________________________________
+          
+          remove_empty_subfolders
+          ____________________________________________________________
+          ''')
+
 remove_empty_subfolders(path)

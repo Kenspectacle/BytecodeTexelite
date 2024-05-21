@@ -4,6 +4,14 @@ import sys
 from util.file_counter import find_total_files_with_certain_keyword
 
 def main():
+    
+    print('''
+          ____________________________________________________________
+          
+          delete_classfiles_with_dollar
+          ____________________________________________________________
+          ''')
+    
     print(os.getcwd())
     path = os.path.join(os.getcwd(), sys.argv[1])
     file_ending = ".class"
