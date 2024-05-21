@@ -8,7 +8,7 @@ def main():
     # metadata
     print(os.getcwd())
     path = os.path.join(os.getcwd(), sys.argv[1])
-    command = "cp "
+    command = "mv "
     file_ending = ".class"
     filtered_directory = "StubClass"
     
