@@ -50,3 +50,21 @@ def walk_with_filtered_file_ending_and_escaped_files(path, command, file_ending,
                     
                     subprocess.run(command + quoted_file + " ..", shell=True,
                         stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            
+def walk_with_specific_file_ending(path, command, file_ending, total_files):
+        current_file_number = 0
+        
+        
+        # Traverse through the directories(and subdirectories) in Java_Classes
+        for dirpath, dirs, files in os.walk(path):
+            for file in files:
+                if file.endswith(file_ending):
+                    current_file_number += 1
+                    os.chdir(dirpath)
+                    
+                    print(f"File Progress: {current_file_number}/{total_files}")
+                    print(f"Processing {os.path.join(os.getcwd(), file)}")
+                    
+                    subprocess.run(command + file, shell=True,
+                        stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            
