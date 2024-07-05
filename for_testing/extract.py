@@ -125,6 +125,10 @@ def process_javap_c_output(lines):
         # DEBUG
         # print(line)
 
+        # Turn on skip for the next function
+        if function_count in functions_to_skip:
+            skip = True
+
         # Get filename for the bc file
         if line_count == 2:
             bc_filename = extract_bc_filename(line) or "no bc filename found"
@@ -135,6 +139,7 @@ def process_javap_c_output(lines):
             if line == "Code:":
                 startline_of_bc = line_count
                 function_count += 1
+                print(f"Code: is detected, current function is {function_count}")
                 if function_count in functions_to_skip:
                     skip = True
                     continue
@@ -149,9 +154,11 @@ def process_javap_c_output(lines):
             #     print(line)
 
             if "Code:" in line:
+                function_count += 1
+                print(f"Code: is detected, current function is {function_count}")
                 startline_of_bc = line_count
                 continue
-            elif line != "":
+            elif line != "" and line != "}":
                 continue
             # skip static initializers
             elif "static {};" in line:
@@ -159,7 +166,7 @@ def process_javap_c_output(lines):
                 continue
             else:
                 print(f"Function {function_count}: is being processed")
-                function_count += 1
+                print("line_count: ", line_count)
                 non_skipped_function_count += 1
                 endline_of_bc = line_count - 1
 
@@ -170,10 +177,7 @@ def process_javap_c_output(lines):
                 with open("output_file.csv", "a") as f:
                     f.write(result_lines[non_skipped_function_count] + "\n")
 
-            # Turn on skip for the next function
-            if function_count in functions_to_skip:
-                skip = True
-                continue
+            
             
 
 def main(class_folder, skip_folder_name):
