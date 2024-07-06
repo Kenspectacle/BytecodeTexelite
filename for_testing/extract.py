@@ -119,7 +119,7 @@ def process_javap_c_output(lines):
     print("functions to skip: ", functions_to_skip)
 
     for line in lines:
-        line = line.strip()  # Strip extra whitespace
+        line1 = line.strip()  # Strip extra whitespace
         line_count += 1
 
         # DEBUG
@@ -131,12 +131,12 @@ def process_javap_c_output(lines):
 
         # Get filename for the bc file
         if line_count == 2:
-            bc_filename = extract_bc_filename(line) or "no bc filename found"
+            bc_filename = extract_bc_filename(line1) or "no bc filename found"
             print("bc filename: ", bc_filename)
 
         # check if the function should be skipped
         if skip:
-            if line == "Code:":
+            if line1 == "Code:":
                 startline_of_bc = line_count
                 function_count += 1
                 print(f"Code: is detected, current function is {function_count}")
@@ -153,21 +153,22 @@ def process_javap_c_output(lines):
             # if function_count == 10:
             #     print(line)
 
-            if "Code:" in line:
+            if "Code:" in line1:
                 function_count += 1
                 print(f"Code: is detected, current function is {function_count}")
                 startline_of_bc = line_count
                 continue
-            elif line != "" and line != "}":
+            elif line1 != "" and line != "}":
                 continue
             # skip static initializers
-            elif "static {};" in line:
+            elif "static {};" in line1:
                 skip = True
                 continue
             else:
                 print(f"Function {function_count}: is being processed")
                 print("line_count: ", line_count)
                 non_skipped_function_count += 1
+                print(f"Non skipped function: {non_skipped_function_count}")
                 endline_of_bc = line_count - 1
 
                 result_lines[non_skipped_function_count] += f",{startline_of_bc},{endline_of_bc},{bc_filename}"
@@ -192,6 +193,7 @@ def main(class_folder, skip_folder_name):
                 result_lines = []  # Reset result_lines for each file processed
 
                 class_file = os.path.join(root, file)
+                print(f"-------------------separator------------------------")
                 print(f"Processing {class_file}")
                 javap_v_output = generate_javap_output(class_file, '-v')
                 javap_c_output = generate_javap_output(class_file, '-c')
