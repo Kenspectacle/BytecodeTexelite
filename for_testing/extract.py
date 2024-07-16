@@ -91,13 +91,14 @@ def process_javap_v_output(lines):
                 function_size = EndLine - StartLine + 1
                 if function_size < function_size_limit:
                     functions_to_skip.append(counter)
-                    print(f"Function {counter} : {subfolder},{FileName},{StartLine},{EndLine} has less than {function_size_limit} lines.")
+                    print(f"Function {counter} : constructor {subfolder},{FileName},{StartLine},{EndLine} has less than {function_size_limit} lines.")
                 else:
                     result = f"{subfolder},{FileName},{StartLine},{EndLine}"
-                    print(f"Function {counter} : {result}")
+                    print(f"Function {counter} : contructor{result}")
                     result_lines.append(result)
                 counter += 1
                 has_annotated_constructor = True
+                continue
             else:
                 continue
         
@@ -107,6 +108,7 @@ def process_javap_v_output(lines):
         StartLine = parse_line_int(line, "StartLine=") or StartLine
 
         if "EndLine=" in line:
+            has_endline = True
             line = line.strip()
             EndLine = parse_line_int(line, "EndLine=")
             function_size = EndLine - StartLine + 1
@@ -167,9 +169,6 @@ def process_javap_c_output(lines):
                 continue
 
         else:
-            # DEBUG
-            # if function_count == 10:
-            #     print(line)
 
             if "Code:" in line1:
                 function_count += 1
@@ -182,6 +181,9 @@ def process_javap_c_output(lines):
             elif "static {};" in line1:
                 skip = True
                 continue
+            elif "abstract" in line1:
+                skip = True
+                continue
             else:
                 print(f"Function {function_count}: is being processed")
                 print("line_count: ", line_count)
@@ -192,7 +194,14 @@ def process_javap_c_output(lines):
                 result_lines[non_skipped_function_count] += f",{startline_of_bc},{endline_of_bc},{bc_filename}"
                 print("bc part: ", f",{startline_of_bc},{endline_of_bc},{bc_filename}")
                 print("RESULT:", result_lines[non_skipped_function_count])
-                print("Result_lines: " , result_lines)
+                
+                # print result lines
+                print("Result lines:")
+                for i, result_line in enumerate(result_lines):
+                    if i == non_skipped_function_count: print("> " + result_line)
+                    else: print(result_line)
+                
+                # write output into csv
                 with open("output_file.csv", "a") as f:
                     f.write(result_lines[non_skipped_function_count] + "\n")
 
@@ -220,6 +229,6 @@ def main(class_folder, skip_folder_name):
                 process_javap_c_output(javap_c_output)
 
 if __name__ == "__main__":
-    class_folder = "BigCloneBench_Unpacked"  # Replace with your actual class folder path
+    class_folder = "sample"  # Replace with your actual class folder path
     skip_folder_name = "StubClass"  # Replace with the folder name you want to skip
     main(class_folder, skip_folder_name)
