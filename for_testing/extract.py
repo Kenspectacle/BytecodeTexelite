@@ -135,6 +135,7 @@ def process_javap_c_output(lines):
     startline_of_bc = 0
     endline_of_bc = 0
     bc_filename = ""
+    is_in_function = False
 
     print("functions to skip: ", functions_to_skip)
 
@@ -143,6 +144,8 @@ def process_javap_c_output(lines):
         line_count += 1
 
         # DEBUG
+        # if function_count == 1:
+        #     print(line)
         # print(line)
 
         # Turn on skip for the next function
@@ -159,11 +162,12 @@ def process_javap_c_output(lines):
             if line1 == "Code:":
                 startline_of_bc = line_count
                 function_count += 1
-                print(f"Code: is detected, current function is {function_count}")
+                print(f"[From Skip] Code: is detected, current function is {function_count}")
                 if function_count in functions_to_skip:
                     skip = True
                     continue
                 else:
+                    is_in_function = True
                     skip = False
             else:
                 continue
@@ -171,6 +175,7 @@ def process_javap_c_output(lines):
         else:
 
             if "Code:" in line1:
+                is_in_function = True
                 function_count += 1
                 print(f"Code: is detected, current function is {function_count}")
                 startline_of_bc = line_count
@@ -184,7 +189,8 @@ def process_javap_c_output(lines):
             elif "abstract" in line1:
                 skip = True
                 continue
-            else:
+            elif is_in_function:
+                is_in_function = False
                 print(f"Function {function_count}: is being processed")
                 print("line_count: ", line_count)
                 non_skipped_function_count += 1
@@ -201,7 +207,10 @@ def process_javap_c_output(lines):
                     if i == non_skipped_function_count: print("> " + result_line)
                     else: print(result_line)
                 
+                
+
                 # write output into csv
+                print(f'writing in: {result_lines[non_skipped_function_count]}')
                 with open("output_file.csv", "a") as f:
                     f.write(result_lines[non_skipped_function_count] + "\n")
 
