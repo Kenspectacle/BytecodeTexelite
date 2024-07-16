@@ -48,10 +48,20 @@ def process_javap_v_output(lines):
     has_annotated_constructor = False
     is_in_constructor = True
     Code_counter = 0
+    has_endline = False
+    first_function = True
+
 
     for line in lines:
+        if counter == 1:
+            first_function = False
 
         if "Code:" in line:
+            if not has_endline and not first_function:
+                functions_to_skip.append(counter)
+                print(f"Function {counter} : does not have annotation")
+            # reinitialize has_endline
+            has_endline = False
             Code_counter += 1
             # print(Code_counter)
 
@@ -73,6 +83,9 @@ def process_javap_v_output(lines):
 
             # if it is annotated it proceeds as normal
             if "EndLine=" in line:
+                has_endline = True
+
+            
                 line = line.strip()
                 EndLine = parse_line_int(line, "EndLine=")
                 function_size = EndLine - StartLine + 1
@@ -105,6 +118,11 @@ def process_javap_v_output(lines):
                 print(f"Function {counter} : {result}")
                 result_lines.append(result)
             counter += 1
+
+    # special: for the last function
+    if not has_endline:
+        functions_to_skip.append(counter)
+        print(f"Function {counter} : does not have annotation")
 
 def process_javap_c_output(lines):
     """Process the javap -c output to match functions."""
@@ -202,6 +220,6 @@ def main(class_folder, skip_folder_name):
                 process_javap_c_output(javap_c_output)
 
 if __name__ == "__main__":
-    class_folder = "smaller_sample_for_test"  # Replace with your actual class folder path
+    class_folder = "BigCloneBench_Unpacked"  # Replace with your actual class folder path
     skip_folder_name = "StubClass"  # Replace with the folder name you want to skip
     main(class_folder, skip_folder_name)
