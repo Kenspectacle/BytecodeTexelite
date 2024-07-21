@@ -60,6 +60,8 @@ def process_javap_v_output(lines):
             if not has_endline and not first_function:
                 functions_to_skip.append(counter)
                 print(f"Function {counter} : does not have annotation")
+                # goes to the next function
+                counter += 1
             # reinitialize has_endline
             has_endline = False
             Code_counter += 1
@@ -238,6 +240,6 @@ def main(class_folder, skip_folder_name):
                 process_javap_c_output(javap_c_output)
 
 if __name__ == "__main__":
-    class_folder = "sample"  # Replace with your actual class folder path
+    class_folder = "BigCloneBench_Unpacked"  # Replace with your actual class folder path
     skip_folder_name = "StubClass"  # Replace with the folder name you want to skip
     main(class_folder, skip_folder_name)
