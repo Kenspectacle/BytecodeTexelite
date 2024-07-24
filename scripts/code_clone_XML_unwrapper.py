@@ -16,7 +16,8 @@ How to use:
 1. Use NiCad to create code clones
 2. Take one of the file from the output in NiCad
 3. In the terminal run "python code_clone_XML_unwrapper.py [code_clone_file] [unwrapped_file_name] [modes]"
-4. if you enter 1 for modes, it will rename all file ending with class.bc to .java, otherwise by default file endings won't change
+4. if you enter 1 for modes, it will rename all file ending with .bc to .java, otherwise by default file endings won't change
+5. if you enter 2 for modes, it will remove the file ending "bc"
 
 """
 
@@ -147,6 +148,42 @@ def create_output_renamed_class_bc_to_Java(input_file_path):
             line = file.readline()
     return outputs
 
+def create_output_remove_bc_ending(input_file_path):
+    outputs = []
+    
+    # Open a code clone xml result from NiCad
+    with open(input_file_path, 'r') as file:
+        # Read the first line
+        line = file.readline()
+        print(line)
+        
+        # Iterate through the rest
+        while line:
+            print(line)
+            # Find Clone pair
+            if line[0:7] == "<clone ":
+                print('CLONE: ', line)
+                
+                # prepare output
+                output = ""
+                
+                # first clone source
+                line = file.readline()
+                directory1,filename1,startline1,endline1 = source_extractor(line)
+                filename1 = filename1[0:-3] # remove .bc ending
+                
+                 # second clone source
+                line = file.readline()
+                directory2,filename2,startline2,endline2 = source_extractor(line)
+                filename2 = filename2[0:-3] # remove .bc ending
+                
+                # add into outputs list
+                output = directory1 + "," + filename1 + ',' + startline1 + ',' + endline1 + ',' + directory2 + "," + filename2 + ',' + startline2 + ',' + endline2
+                outputs.append(output)
+            
+            line = file.readline()
+    return outputs
+
 def main():
     
     # File paths
@@ -155,11 +192,14 @@ def main():
     modes = 0
     
     # Optional: can use different modes. Enter 1 to change .class.bc filename ending to .java
-    if len(sys.argv) > 3:
+    if len(sys.argv) >= 3:
         modes = sys.argv[3]
     
     # default mode
-    if modes == "1":
+    if modes == "2":
+        outputs = create_output_remove_bc_ending(input_file_path)
+        pass
+    elif modes == "1":
         outputs = create_output_renamed_class_bc_to_Java(input_file_path)
     else:
         outputs = create_output(input_file_path)
