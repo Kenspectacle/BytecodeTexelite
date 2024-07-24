@@ -19,9 +19,25 @@ How to use:
 
 """
 
+def get_file_content(file_path):
+    file_content = []
+    with open(file_path, 'r') as file:
+        line = file.readline()
+        while line:
+            line = line[:-1] # remove \n at the end
+            file_content.append(line)
+            line = file.readline()
+    return file_content
+
+
 
 def main():
     input_file_path = sys.argv[1]
     original_mapping_file_path = sys.argv[2]
     output_file_path = sys.argv[3]
 
+    inputs = get_file_content(input_file_path)
+    mappings = get_file_content(original_mapping_file_path)
+
+if __name__ == "__main__":
+    main()
