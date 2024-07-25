@@ -38,23 +38,26 @@ def get_file_content(file_path):
 def extract_input_data(input_data):
     directory = input_data[0]
     filename_bc = input_data[1]
-    startline_bc = input_data[2]
-    endline_bc = input_data[3]
+    startline_bc = int(input_data[2])
+    endline_bc = int(input_data[3])
     directory_2 = input_data[4]  
     filename_bc_2 = input_data[5]
-    startline_bc_2 = input_data[6]
-    endline_bc_2 = input_data[7]
+    startline_bc_2 = int(input_data[6])
+    endline_bc_2 = int(input_data[7])
     return directory, filename_bc, startline_bc, endline_bc, directory_2, filename_bc_2, startline_bc_2, endline_bc_2
 
 def extract_mapping_data(mapping_data):
     directory_mapper = mapping_data[0]
     filename_java = mapping_data[1]
-    startline_java = mapping_data[2]
-    endline_java = mapping_data[3]
-    startline_bc_mapper = mapping_data[4]
-    endline_bc_mapper = mapping_data[5]
+    startline_java = int(mapping_data[2])
+    endline_java = int(mapping_data[3])
+    startline_bc_mapper = int(mapping_data[4])
+    endline_bc_mapper = int(mapping_data[5])
     filename_bc_mapper = mapping_data[6]
     return directory_mapper, filename_java, startline_java, endline_java, startline_bc_mapper, endline_bc_mapper, filename_bc_mapper
+
+def within_tolerance(value, target, tolerance=2):
+    return target - tolerance <= value <= target + tolerance
 
 
 def map_output(inputs, mappings):
@@ -92,8 +95,8 @@ endline_bc_2: {endline_bc_2}
             if (
                 directory == directory_mapper
                 and filename_bc == filename_bc_mapper
-                and startline_bc == startline_bc_mapper
-                and endline_bc == endline_bc_mapper
+                and within_tolerance(startline_bc, startline_bc_mapper)
+                and within_tolerance(endline_bc, endline_bc_mapper)
             ):
                 print('Clone 1 mapping found!')
                 print(f'Transforming from: {filename_bc}, {startline_bc}, {endline_bc} to {filename_java}, {startline_java}, {endline_java}')
@@ -103,8 +106,8 @@ endline_bc_2: {endline_bc_2}
             if (
                 directory_2 == directory_mapper
                 and filename_bc_2 == filename_bc_mapper
-                and startline_bc_2 == startline_bc_mapper
-                and endline_bc_2 == endline_bc_mapper
+                and within_tolerance(startline_bc_2, startline_bc_mapper)
+                and within_tolerance(endline_bc_2, endline_bc_mapper)
             ):
                 print('Clone 2 mapping found!')
                 print(f'Transforming from: {filename_bc_2}, {startline_bc_2}, {endline_bc_2} to {filename_java}, {startline_java}, {endline_java}')
