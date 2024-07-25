@@ -19,6 +19,12 @@ How to use:
 
 """
 
+class CloneMappingError(Exception):
+    """Exception raised for errors in the clone mapping process."""
+    def __init__(self, message="Clone mapping not found"):
+        self.message = message
+        super().__init__(self.message)
+
 def get_file_content(file_path):
     file_content = []
     with open(file_path, 'r') as file:
@@ -106,7 +112,7 @@ endline_bc_2: {endline_bc_2}
         
         # case: one of the clone can't find any mapping
         if not first_clone_map_found or not second_clone_map_found:
-            print("PROBLEM!!!!")
+            raise CloneMappingError()
 
 
     return outputs
