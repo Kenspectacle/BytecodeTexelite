@@ -130,15 +130,23 @@ endline_bc_2: {endline_bc_2}
         
         # case: found both clones, transforming them and add into output
         if first_clone_map_found and second_clone_map_found:
-            outputs.append([directory, replacement_filename_java_1, replacement_startline_java_1, replacement_endline_java_1, directory_2, replacement_filename_java_2, replacement_startline_java_2, replacement_endline_java_2])
+            output = f'{directory}, {replacement_filename_java_1}, {replacement_startline_java_1}, {replacement_endline_java_1}, {directory_2}, {replacement_filename_java_2}, {replacement_startline_java_2}, {replacement_endline_java_2}'
+            outputs.append(output)
         
-        print (outputs)
+        # print (outputs)
         # case: one of the clone can't find any mapping
-        if not first_clone_map_found or not second_clone_map_found:
-            raise CloneMappingError()
+        # if not first_clone_map_found or not second_clone_map_found:
+        #     raise CloneMappingError()
 
 
     return outputs
+
+def write_output_to_csv(outputs):
+    print("Writing output into: {output_file_path}")
+    with open(output_file_path, 'w') as file:
+        for output in outputs:
+            print(output)
+            file.write(output + "\n")     
 
 
 def main():
@@ -149,6 +157,11 @@ def main():
     inputs = get_file_content(input_file_path)
     mappings = get_file_content(original_mapping_file_path)
     outputs = map_output(inputs, mappings)
+
+    print(outputs)
+
+    write_output_to_csv(outputs)
+
 
 if __name__ == "__main__":
     main()
