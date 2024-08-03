@@ -60,10 +60,28 @@ def extract_mapping_data(mapping_data):
 def within_tolerance(value, target, tolerance=2):
     return target - tolerance <= value <= target + tolerance
 
+# Function to find a single clone within tolerance
+def find_clone_within_tolerance(startline_bc, endline_bc, bc_to_java_map, directory, filename_bc):
+    if (directory, filename_bc) not in bc_to_java_map:
+        return None
+
+    for mapping in bc_to_java_map[(directory, filename_bc)]:
+        directory_mapping = mapping[0]
+        filename_java_mapping = mapping[1]
+        startline_java_mapping = mapping[2]
+        endline_java_mapping = mapping[3]
+        startline_bc_mapping = mapping[4]
+        endline_bc_mapping = mapping[5]
+        filename_bc_mapping = mapping[6]
+        if within_tolerance(startline_bc, startline_bc_mapping) and within_tolerance(endline_bc, endline_bc_mapping):
+            return f'{directory},{filename_java_mapping},{startline_java_mapping},{endline_java_mapping}'
+    
+    return None
+
 
 def map_output(inputs, mappings):
     outputs = []
-    bc_to_java_map = defaultdict(list)
+    bc_to_java_map = defaultdict(list) # key : directory name, filename bc || value : directory, filename_java, startline_java, endline_java, startline_bc, endline_bc, filename_bc
     clone_1 = ""
     clone_2 = ""
 
@@ -74,7 +92,7 @@ def map_output(inputs, mappings):
         mapping_data = mapping.split(',')
         directory_mapper, filename_java, startline_java, endline_java, startline_bc_mapper, endline_bc_mapper, filename_bc_mapper = extract_mapping_data(mapping_data)
         print("Current mapping data: ", directory_mapper, filename_java, startline_java, endline_java, startline_bc_mapper, endline_bc_mapper, filename_bc_mapper)
-        bc_to_java_map[(directory_mapper, filename_bc_mapper)].append([directory_mapper, filename_java, startline_java, endline_java, startline_bc_mapper, endline_bc_mapper, filename_bc_mapper]) 
+        bc_to_java_map[(directory_mapper, filename_bc_mapper + ".bc")].append([directory_mapper, filename_java, startline_java, endline_java, startline_bc_mapper, endline_bc_mapper, filename_bc_mapper]) 
 
     for input in inputs:
         first_clone_map_found = False
@@ -95,84 +113,14 @@ filename_bc_2: {filename_bc_2}
 startline_bc_2: {startline_bc_2}
 endline_bc_2: {endline_bc_2}
         ''')
-        
-
-        # placeholders
-        replacement_filename_java_1 = ""
-        replacement_startline_java_1 = 0
-        replacement_endline_java_1 = 0
-        replacement_filename_java_2 = ""
-        replacement_startline_java_2 = 0
-        replacement_endline_java_2 = 0
-
-                        # for mapping in mappings:
-
-                        #     if first_clone_map_found and second_clone_map_found:
-                        #         print(f'Transforming clone 1 from: {directory}, {filename_bc}, {startline_bc}, {endline_bc} to {directory}, {replacement_filename_java_1}, {replacement_startline_java_1}, {replacement_endline_java_1}')
-                        #         print(f'Transforming clone 2 from: {directory_2}, {filename_bc_2}, {startline_bc_2}, {endline_bc_2} to {directory_2}, {replacement_filename_java_2}, {replacement_startline_java_2}, {replacement_endline_java_2}')
-                        #         break
-
-
-                            
-                        #     # check for clone 1
-                        #     if (
-                        #         directory == directory_mapper
-                        #         and filename_bc == filename_bc_mapper
-                        #         and within_tolerance(startline_bc, startline_bc_mapper)
-                        #         and within_tolerance(endline_bc, endline_bc_mapper)
-                        #     ):
-                        #         print('Clone 1 mapping found!')
-                        #         replacement_filename_java_1 = filename_java
-                        #         replacement_startline_java_1 = startline_java
-                        #         replacement_endline_java_1 = endline_java
-                        #         first_clone_map_found = True
-                            
-                        #     # Check for clone 2
-                        #     if (
-                        #         directory_2 == directory_mapper
-                        #         and filename_bc_2 == filename_bc_mapper
-                        #         and within_tolerance(startline_bc_2, startline_bc_mapper)
-                        #         and within_tolerance(endline_bc_2, endline_bc_mapper)
-                        #     ):
-                        #         print('Clone 2 mapping found!')
-                        #         replacement_filename_java_2 = filename_java
-                        #         replacement_startline_java_2 = startline_java
-                        #         replacement_endline_java_2 = endline_java
-                        #         second_clone_map_found = True
-                        
-                        # # case: found both clones, transforming them and add into output
-                        # if first_clone_map_found and second_clone_map_found:
-                        #     output = f'{directory}, {replacement_filename_java_1}, {replacement_startline_java_1}, {replacement_endline_java_1}, {directory_2}, {replacement_filename_java_2}, {replacement_startline_java_2}, {replacement_endline_java_2}'
-                        #     outputs.append(output)
-        
 
         # check for clone 1
-        if (directory , filename_bc) in bc_to_java_map:
-            for mapping in bc_to_java_map[(directory , filename_bc)]:
-                directory_mapping = mapping[0]
-                filename_java_mapping = mapping[1]
-                startline_java_mapping = mapping[2]
-                endline_java_mapping = mapping[3]
-                startline_bc_mapping = mapping[4]
-                endline_bc_mapping = mapping[5]
-                filename_bc_mapping = mapping[6]
-
-                if(within_tolerance(startline_bc, startline_bc_mapping) and within_tolerance(endline_bc, endline_bc_mapping)):
-                    clone_1 = f'{directory},{filename_java_mapping},{startline_java_mapping},{endline_java_mapping}'
+        clone_1 = find_clone_within_tolerance(startline_bc, endline_bc, bc_to_java_map, directory, filename_bc)
+        print(f'clone 1: {clone_1}')
 
         # check for clone 2
-        if (directory_2, filename_bc_2) in bc_to_java_map:
-            for mapping in bc_to_java_map[(directory , filename_bc)]:
-                directory_mapping = mapping[0]
-                filename_java_mapping = mapping[1]
-                startline_java_mapping = mapping[2]
-                endline_java_mapping = mapping[3]
-                startline_bc_mapping = mapping[4]
-                endline_bc_mapping = mapping[5]
-                filename_bc_mapping = mapping[6]
-
-                if(within_tolerance(startline_bc_2, startline_bc_mapping) and within_tolerance(endline_bc_2, endline_bc_mapping)):
-                    clone_2 = f'{directory_2},{filename_java_mapping},{startline_java_mapping},{endline_java_mapping}'
+        clone_2 = find_clone_within_tolerance(startline_bc_2, endline_bc_2, bc_to_java_map, directory_2, filename_bc_2)
+        print(f'clone 2: {clone_2}')
 
         if clone_1 and clone_2:
             print(f'Transforming clone 1 from: {directory}, {filename_bc}, {startline_bc}, {endline_bc} to {clone_1}')
@@ -192,7 +140,7 @@ endline_bc_2: {endline_bc_2}
     return outputs
 
 def write_output_to_csv(outputs, output_file_path):
-    print("Writing output into: {output_file_path}")
+    print(f'Writing output into: {output_file_path}')
     with open(output_file_path, 'w') as file:
         for output in outputs:
             print(output)
@@ -211,7 +159,11 @@ def main():
     print(outputs)
 
     write_output_to_csv(outputs, output_file_path)
-
+    
+    # report
+    print(f'Original length: {len(inputs)}')
+    print(f'mapping length: {len(mappings)}')
+    print(f'outputs length: {len(outputs)}')
 
 if __name__ == "__main__":
     main()
