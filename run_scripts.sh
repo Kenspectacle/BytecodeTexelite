@@ -14,9 +14,12 @@ echo "SCRIPT_FOLDER: $SCRIPT_FOLDER"
 echo "UTIL_FOLDER: $UTIL_FOLDER"
 
 # Run all of the scripts in bytecode texelite with the SCRIPT_FOLDER as a prefix
-python "$SCRIPT_FOLDER/JAR_extractor.py" $TARGET_FOLDER
-python "$SCRIPT_FOLDER/move_class_file_to_new_folder.py" $TARGET_FOLDER
-python "$SCRIPT_FOLDER/delete_classfiles_with_dollar.py" $TARGET_FOLDER
-python "$SCRIPT_FOLDER/class_file_to_text_Bytecode.py" $TARGET_FOLDER
-python "$SCRIPT_FOLDER/remove_all_file_except_bc_files.py" $TARGET_FOLDER
+# python "$SCRIPT_FOLDER/JAR_extractor.py" $TARGET_FOLDER
+# python "$SCRIPT_FOLDER/move_class_file_to_new_folder.py" $TARGET_FOLDER
+# alternative: also renaming the class file name with parent folder's name
+# python "$SCRIPT_FOLDER/delete_classfiles_with_dollar.py" $TARGET_FOLDER
+# python "$SCRIPT_FOLDER/class_file_to_text_Bytecode.py" $TARGET_FOLDER
+# python "$SCRIPT_FOLDER/remove_all_file_except_bc_files.py" $TARGET_FOLDER
+# python "$SCRIPT_FOLDER/remove_empty_folders.py" $TARGET_FOLDER
+# python "$SCRIPT_FOLDER/move_bc_file_and_rename_to_super_foldername_javaname.py" $TARGET_FOLDER
 python "$SCRIPT_FOLDER/remove_empty_folders.py" $TARGET_FOLDER
