@@ -18,7 +18,7 @@ def main():
     file_ending = ".class"
     filtered_directory = "StubClass"
     total_files = find_total_files_with_file_ending_and_filtered_directory(file_ending, path, filtered_directory)
-    command = "javap -c "
+    command = "javap -c -p "
     current_file_number = 0
 
     # Traverse through the directories(and subdirectories) in Java_Classes
